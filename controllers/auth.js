@@ -14,16 +14,17 @@ exports.join = async (req, res, next) => {
       return res.redirect("/join?error=exist");
     }
     const hash = await bcrypt.hash(password, 12);
-    const namehash = await bcrypt.hash(nickname, 12);
+
     await User.create({
       email,
-      name: namehash,
+      name: nickname,
       password: hash,
       WriteBool,
     });
   } catch (error) {
     console.error(error);
     res.status(error.status || 500);
+    console.log("저기");
     return next(error);
   }
 };
@@ -36,17 +37,14 @@ exports.login = (req, res, next) => {
     if (authError) {
       return next(authError);
     }
-    console.log(2);
+
     if (!user) {
       return res
         .status(400)
         .send(`/?loginError=${info.message} // ${res.data} : login에러`);
     }
-    console.log(3);
     return req.login(user, (loginError) => {
-      console.log(4);
       if (loginError) {
-        console.log(5);
         console.error(loginError);
         res.status(400).send(`${res.data} : login에러`);
         return next(loginError);

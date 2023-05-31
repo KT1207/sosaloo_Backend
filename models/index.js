@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const User = require("./user");
+const Post = require("./post");
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
 
@@ -29,12 +30,14 @@ fs.readdirSync(__dirname) // 현재 폴더의 모든 파일을 조회
     //console.log(file, model.name);
     //db[model.name] = model;
     db[User] = User;
+    db[Post] = Post;
     User.initiate(sequelize);
+    Post.initiate(sequelize);
   });
 /*
 Object.keys(db).forEach((modelName) => {
   // associate 호출
-  if (db[modelName].associate) {
+  if (db[modelName].associate) {  
     db[User].associate(db);
   }
 });
